@@ -22,14 +22,14 @@ repos:
       - id: black-jupyter
 
   - repo: https://github.com/hadialqattan/pycln
-    rev: "v2.1.2"
+    rev: "v2.1.3"
     hooks:
       - id: pycln
         args: [--all]
         stages: [manual]
 
   - repo: https://github.com/PyCQA/isort
-    rev: "5.11.4"
+    rev: "5.12.0"
     hooks:
       - id: isort
 
@@ -40,7 +40,7 @@ repos:
         args: ["--py37-plus"]
 
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: "v1.9.0"
+    rev: "v1.10.0"
     hooks:
       - id: python-check-blanket-noqa
       - id: python-check-blanket-type-ignore
