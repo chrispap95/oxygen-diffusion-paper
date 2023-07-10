@@ -110,7 +110,7 @@ def process_image(
         The widths of the peaks in the image
     """
     mid = int(lightness_channel.shape[0] / 2)
-    slc = [slice(mid - cut, mid + cut), ...]
+    slc = [slice(mid - cut, mid + cut), slice(None)]
     lightness_profile = np.mean(lightness_channel[*slc], axis=0)
     abs_gradient = np.abs(np.gradient(lightness_profile))
     smoothened = savgol_filter(
