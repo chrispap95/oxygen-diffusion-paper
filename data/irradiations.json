@@ -1,0 +1,154 @@
+{
+  "EJ200PS-1X1P-3": {
+    "temperature": -30,
+    "dose rate": 749,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PS-1X1P-4": {
+    "dose rate": 2.2,
+    "rel dose rate unc": 0.1,
+    "dose": 13.2
+  },
+  "EJ200PS-1X1P-5": {
+    "dose rate": 85.3,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PS-1X1P-8": {
+    "dose rate": 744,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PS-1X1P-9": {
+    "dose rate": 3900,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PS-1X1P-13": {
+    "dose rate": 9.8,
+    "rel dose rate unc": 0.1,
+    "dose": 42
+  },
+  "EJ200PS-1X1P-15": {
+    "dose rate": 3.1,
+    "rel dose rate unc": 0.1,
+    "dose": 12.6
+  },
+  "EJ200PS-T1-2": {
+    "dose rate": 80.6,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PS-T1-3": {
+    "dose rate": 3640,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PS-T1-4": {
+    "dose rate": 3380,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PS-L7R": {
+    "dose rate": 130,
+    "rel dose rate unc": 0.012,
+    "dose": 69
+  },
+  "EJ200PS-L8R": {
+    "dose rate": 130,
+    "rel dose rate unc": 0.012,
+    "dose": 69
+  },
+  "EJ200PS-L9R": {
+    "dose rate": 460,
+    "rel dose rate unc": 0.012,
+    "dose": 69
+  },
+  "EJ200PS-L10R": {
+    "dose rate": 460,
+    "rel dose rate unc": 0.012,
+    "dose": 69
+  },
+  "EJ200PS-L11R": {
+    "dose rate": 460,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PVT-1X1P-N2": {
+    "dose rate": 2380,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PVT-1X1P-N3": {
+    "temperature": "-30",
+    "dose rate": 749,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PVT-1X1P-N4": {
+    "dose rate": 744,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PVT-1X1P-N5": {
+    "dose rate": 85.3,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PVT-1X1P-N8": {
+    "dose rate": 2.2,
+    "rel dose rate unc": 0.1,
+    "dose": 13.2
+  },
+  "EJ200PVT-1X1P-N15": {
+    "dose rate": 3.1,
+    "rel dose rate unc": 0.1,
+    "dose": 12.6
+  },
+  "EJ200PVT-1X1P-N16": {
+    "dose rate": 9.8,
+    "rel dose rate unc": 0.1,
+    "dose": 42
+  },
+  "EJ200PVT-T1-2": {
+    "dose rate": 81.9,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PVT-T1-3": {
+    "dose rate": 3700,
+    "rel dose rate unc": 0.1,
+    "dose": 70
+  },
+  "EJ200PVT-T1-5": {
+    "dose rate": 3.1,
+    "rel dose rate unc": 0.1,
+    "dose": 12.6
+  },
+  "EJ200PVT-T1-N1": {
+    "dose rate": 3.1,
+    "rel dose rate unc": 0.1,
+    "dose": 12.6
+  },
+  "EJ200PVT-A0-1-1": {
+    "dose rate": 3,
+    "rel dose rate unc": 0.1,
+    "dose": 17.1
+  },
+  "EJ200PVT-A0-1-2": {
+    "dose rate": 2930,
+    "rel dose rate unc": 0.012,
+    "dose": 60
+  },
+  "EJ200PVT-A0-1-3": {
+    "dose rate": 2380,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  },
+  "EJ200PVT-L3R": {
+    "dose rate": 460,
+    "rel dose rate unc": 0.012,
+    "dose": 70
+  }
+}

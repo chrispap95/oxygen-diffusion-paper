@@ -131,3 +131,14 @@ dmypy.json
 # PDF files
 *.pdf
 plots/
+
+# Photos
+*.jpg
+*.jpeg
+*.png
+
+# Large data files
+data/still_photos/
+data/still_plots/
+data/video_frames/
+data/video_plots/

@@ -1,0 +1,242 @@
+{
+  "default_config": {
+    "input_path": "/Users/chrispap/Downloads/photos_for_lightness",
+    "window_length": 11,
+    "polyorder": 3,
+    "cut": 200,
+    "prominence": 2,
+    "rel_height": 0.5,
+    "d": 9,
+    "sigmaColor": 100,
+    "sigmaSpace": 100,
+    "clipLimit": 2.0,
+    "tileGridSize": 10
+  },
+  "EJ200PS-1X1P-5": {
+    "config": {
+      "cut": 200,
+      "prominence": 2.5
+    },
+    "FaceA": {
+      "0": [1, 2, 5]
+    },
+    "FaceB": {
+      "0": [1, 3, 8]
+    },
+    "FaceC": {
+      "0": [5, 3, 1]
+    },
+    "FaceD": {
+      "0": [8, 7, 1]
+    }
+  },
+  "EJ200PS-1X1P-9": {
+    "config": {
+      "cut": 1000
+    },
+    "FaceA": {
+      "0": [1, 3, 7]
+    },
+    "FaceB": {
+      "0": [1, 2, 6]
+    },
+    "FaceC": {
+      "0": [7, 5, 1]
+    },
+    "FaceD": {
+      "0": [6, 5, 1]
+    }
+  },
+  "EJ200PS-L11R": {
+    "config": {
+      "cut": 750,
+      "window_length": 13,
+      "prominence": 1.0
+    },
+    "FaceA": {
+      "0": [2, 5, 11]
+    },
+    "FaceB": {
+      "0": [2, 6, 14]
+    },
+    "FaceC": {
+      "0": [11, 9, 2]
+    },
+    "FaceD": {
+      "0": [14, 12, 2]
+    }
+  },
+  "EJ200PS-T1-2": {
+    "config": {
+      "cut": 250,
+      "prominence": 1
+    },
+    "FaceA": {
+      "0": [1, 4, 13]
+    },
+    "FaceB": {
+      "0": [1, 5, 14]
+    },
+    "FaceC": {
+      "0": [13, 9, 1]
+    },
+    "FaceD": {
+      "0": [14, 9, 1]
+    }
+  },
+  "EJ200PS-T1-3": {
+    "config": {
+      "cut": 1000
+    },
+    "FaceA": {
+      "0": [1, 3, 8]
+    },
+    "FaceB": {
+      "0": [1, 3, 7]
+    },
+    "FaceC": {
+      "0": [8, 6, 1]
+    },
+    "FaceD": {
+      "0": [7, 5, 1]
+    }
+  },
+  "EJ200PS-T1-4": {
+    "config": {
+      "cut": 1000
+    },
+    "FaceA": {
+      "0": [2, 5, 10]
+    },
+    "FaceB": {
+      "0": [1, 4, 14]
+    },
+    "FaceC": {
+      "0": [10, 8, 2]
+    },
+    "FaceD": {
+      "0": [14, 11, 1]
+    }
+  },
+  "EJ200PVT-1X1P-N2": {
+    "config": {
+      "cut": 1000
+    },
+    "FaceA": {
+      "0": [1, 3, 8]
+    },
+    "FaceB": {
+      "0": [1, 2, 11]
+    },
+    "FaceC": {
+      "0": [8, 7, 1]
+    },
+    "FaceD": {
+      "0": [11, 9, 1]
+    }
+  },
+  "EJ200PVT-1X1P-N3": {
+    "config": {
+      "cut": 300,
+      "window_length": 13
+    },
+    "FaceA": {
+      "config": {
+        "prominence": 1.5,
+        "d": 45,
+        "window_length": 15
+      },
+      "0": [1, 9, 26]
+    },
+    "FaceB": {
+      "0": [2, 4, 9]
+    },
+    "FaceC": {
+      "config": {
+        "prominence": 1.5,
+        "d": 45,
+        "window_length": 15
+      },
+      "0": [26, 18, 1]
+    },
+    "FaceD": {
+      "0": [9, 7, 2]
+    }
+  },
+  "EJ200PVT-1X1P-N4": {
+    "config": {
+      "cut": 900,
+      "prominence": 2.5,
+      "window_length": 13
+    },
+    "FaceA": {
+      "0": [2, 3, 7]
+    },
+    "FaceB": {
+      "config": {
+        "prominence": 4
+      },
+      "0": [2, 3, 28]
+    },
+    "FaceC": {
+      "0": [7, 5, 2]
+    },
+    "FaceD": {
+      "config": {
+        "prominence": 4
+      },
+      "0": [28, 27, 2]
+    }
+  },
+  "EJ200PVT-A0-1-2": {
+    "config": {
+      "cut": 1000
+    },
+    "FaceA": {
+      "0": [1, 3, 8]
+    },
+    "FaceB": {
+      "0": [1, 5, 11]
+    },
+    "FaceC": {
+      "0": [8, 6, 1]
+    },
+    "FaceD": {
+      "0": [11, 9, 1]
+    }
+  },
+  "EJ200PVT-A0-1-3": {
+    "config": {
+      "cut": 1000
+    },
+    "FaceA": {
+      "0": [1, 4, 8]
+    },
+    "FaceB": {
+      "0": [1, 3, 6]
+    },
+    "FaceC": {
+      "0": [8, 6, 1]
+    },
+    "FaceD": {
+      "0": [6, 5, 1]
+    }
+  },
+  "EJ200PVT-T1-3": {
+    "config": {
+      "cut": 1000
+    },
+    "FaceA": {
+      "0": [1, 2, 8]
+    },
+    "FaceB": {
+      "0": [1, 5, 13]
+    },
+    "FaceC": {
+      "0": [8, 5, 1]
+    },
+    "FaceD": {
+      "0": [13, 10, 1]
+    }
+  }
+}

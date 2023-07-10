@@ -3,6 +3,7 @@ repos:
     rev: "v4.4.0"
     hooks:
       - id: check-added-large-files
+        args: ["--maxkb=2048"]
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: check-symlinks
@@ -27,6 +28,12 @@ repos:
       - id: pycln
         args: [--all]
         stages: [manual]
+
+  - repo: https://github.com/pycqa/flake8
+    rev: "5.0.4"
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-bugbear]
 
   - repo: https://github.com/PyCQA/isort
     rev: "5.12.0"
