@@ -131,17 +131,17 @@
     "rel dose rate unc": 0.1,
     "dose": 12.6
   },
-  "EJ200PVT-A0-1-1": {
+  "EJ200PVT-AO-1-1": {
     "dose rate": 3,
     "rel dose rate unc": 0.1,
     "dose": 17.1
   },
-  "EJ200PVT-A0-1-2": {
+  "EJ200PVT-AO-1-2": {
     "dose rate": 2930,
     "rel dose rate unc": 0.012,
     "dose": 60
   },
-  "EJ200PVT-A0-1-3": {
+  "EJ200PVT-AO-1-3": {
     "dose rate": 2380,
     "rel dose rate unc": 0.012,
     "dose": 70
