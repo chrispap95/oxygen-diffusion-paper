@@ -54,6 +54,31 @@ def inv_sq_root(x, p):
 def plotter(
     material, input_irradiations, input_depths, fig=None, ax=None, minimal=False
 ):
+    """
+    Plot the depth vs dose rate for a given material
+
+    Parameters
+    ----------
+    material : str
+        Material to plot (PS or PVT)
+    input_irradiations : dict
+        Dictionary with irradiation information
+    input_depths : dict
+        Dictionary with depth information
+    fig : matplotlib.figure.Figure
+        Figure to plot on (optional)
+    ax : matplotlib.axes.Axes
+        Axes to plot on (optional)
+    minimal : bool
+        Whether to plot a minimal version of the plot (optional)
+
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        Figure with plot
+    ax : matplotlib.axes.Axes
+        Axes with plot
+    """
     x = []
     y = []
     xerr = []
@@ -132,9 +157,29 @@ def plotter(
             fontsize=22,
         )
     plt.tight_layout()
+    return fig, ax
 
 
 def plot_no_boundary(material, input_list, input_irradiations, ax):
+    """
+    Plot the depth vs dose rate for a given material for rods without boundaries
+
+    Parameters
+    ----------
+    material : str
+        Material to plot (PS or PVT)
+    input_list : dict
+        Dictionary with irradiation information
+    input_irradiations : dict
+        Dictionary with depth information
+    ax : matplotlib.axes.Axes
+        Axes to plot on (optional)
+
+    Returns
+    -------
+    ax : matplotlib.axes.Axes
+        Axes with plot
+    """
     x = []
     xerr = []
     for rod in input_list["no boundary"]:
@@ -168,6 +213,7 @@ def plot_no_boundary(material, input_list, input_irradiations, ax):
         uplims=True,
     )
     ax.set_xlim(1, 10000)
+    return ax
 
 
 if __name__ == "__main__":
@@ -178,15 +224,13 @@ if __name__ == "__main__":
     input_list = json.load(open(args.input_list))
 
     if args.both:
-        plotter(
+        fig, ax = plotter(
             material="PS",
             input_irradiations=input_irradiations,
             input_depths=input_depths,
             minimal=True,
         )
-        fig = plt.gcf()
-        ax = plt.gca()
-        plotter(
+        fig, ax = plotter(
             material="PVT",
             input_irradiations=input_irradiations,
             input_depths=input_depths,
@@ -195,13 +239,13 @@ if __name__ == "__main__":
             minimal=True,
         )
         if args.include_no_boundaries:
-            plot_no_boundary(
+            ax = plot_no_boundary(
                 material="PS",
                 input_list=input_list,
                 input_irradiations=input_irradiations,
                 ax=ax,
             )
-            plot_no_boundary(
+            ax = plot_no_boundary(
                 material="PVT",
                 input_list=input_list,
                 input_irradiations=input_irradiations,
@@ -221,28 +265,27 @@ if __name__ == "__main__":
             label="data",
             color="black",
         )
-        # dummy_errorbar = plt.errorbar([], [],  fmt="o", capsize=3, color="black")[0]
 
         # Add legends
         color_legend = ax.legend([dummy_PS, dummy_PVT], ["PS", "PVT"], loc="lower left")
-        plt.gca().add_artist(color_legend)
+        ax.add_artist(color_legend)
         ax.legend(
             handles=[dummy_errorbar, dummy_line[0]],
             labels=["data", "fit"],
             loc="upper right",
         )
     else:
-        plotter(
+        fig, ax = plotter(
             input_irradiations=input_irradiations,
             input_depths=input_depths,
             material=args.material,
         )
         if args.include_no_boundaries:
-            plot_no_boundary(
+            ax = plot_no_boundary(
                 material=args.material,
                 input_list=input_list,
                 input_irradiations=input_irradiations,
-                ax=plt.gca(),
+                ax=ax,
             )
 
     plt.savefig(args.output)
