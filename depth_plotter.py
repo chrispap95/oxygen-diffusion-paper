@@ -1,3 +1,9 @@
+"""
+Plot the depth vs dose rate for PS and/or PVT
+
+Author: Christos Papageorgakis
+"""
+
 import argparse
 import json
 
@@ -118,8 +124,6 @@ def plotter(
     ax.errorbar(
         x, y, xerr=xerr, yerr=yerr, fmt="o", capsize=3, label="Data", color=color
     )
-    if not minimal:
-        ax.set_title(f"Depth vs dose rate for {material}", fontsize=22)
     ax.set_xlabel("Dose rate (Gy/h)")
     ax.set_ylabel("Depth (mm)")
     ax.set_xlim(10, 10000)
@@ -147,6 +151,7 @@ def plotter(
                 f"{p} = ${v:.1f} \\pm {e:.1f}$ $\\frac{{mm\\cdot h^{{1/2}}}}{{Gy^{{1/2}}}}$"
             )
 
+        ax.set_title(f"Depth vs dose rate for {material}", fontsize=22)
         ax.legend(loc="lower left")
         ax.text(
             150,
@@ -156,6 +161,15 @@ def plotter(
             va="top",
             fontsize=22,
         )
+
+    # Print the fit results
+    print(f"\nFit results for {material}")
+    print(f"  chi2 / ndof = {m.fval:.1f} / {m.ndof:.0f} = {m.fmin.reduced_chi2:.1f}")
+    for p, v, e in zip(m.parameters, m.values, m.errors):
+        print(f"\t{p} = {v:.3f} ± {e:.3f} mm*h^(1/2)/Gy^(1/2)")
+        print(f"\tR_0 = {v**2 / 25:.3f} ± {2*v*e / 25:.3f} Gy/h")
+    print()
+
     plt.tight_layout()
     return fig, ax
 

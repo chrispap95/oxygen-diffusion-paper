@@ -1,0 +1,176 @@
+import argparse
+import json
+
+import matplotlib.pyplot as plt
+import mplhep as hep
+import numpy as np
+
+plt.style.use(hep.style.ROOT)
+
+
+parser = argparse.ArgumentParser(description="Plot the refractive index")
+parser.add_argument("-m", "--material", help="Material to plot", type=str, default="PS")
+parser.add_argument("-b", "--both", help="Plot both materials", action="store_true")
+parser.add_argument(
+    "--input_irradiations",
+    help="Input irradiations file",
+    type=str,
+    default="data/irradiations.json",
+)
+parser.add_argument(
+    "--input_indices",
+    help="Input indices file",
+    type=str,
+    default="data/indices.json",
+)
+parser.add_argument(
+    "--input_list",
+    help="Input file with list of existing rods",
+    type=str,
+    default="data/rod_list.json",
+)
+parser.add_argument(
+    "-o",
+    "--output",
+    help="Output file",
+    type=str,
+    default="plots/index.pdf",
+)
+
+
+def plotter(
+    material, input_irradiations, input_indices, fig=None, ax=None, minimal=False
+):
+    x = []
+    xerr = []
+    y_out = []
+    yerr_out = []
+    y_in = []
+    yerr_in = []
+    for rod in input_indices.keys():
+        if material not in rod:
+            continue
+        if "temperature" in input_irradiations[rod].keys():
+            continue
+        if "L11R" in rod:
+            continue
+        x.append(input_irradiations[rod]["dose rate"])
+        xerr.append(input_irradiations[rod]["rel dose rate unc"])
+        y_out.append(input_indices[rod]["n_out"])
+        yerr_out.append(input_indices[rod]["n_out_unc"])
+        y_in.append(input_indices[rod]["n_in"])
+        yerr_in.append(input_indices[rod]["n_in_unc"])
+    x = np.array(x, dtype=float)
+    xerr = np.array(xerr, dtype=float)
+    y_out = np.array(y_out, dtype=float)
+    yerr_out = np.array(yerr_out, dtype=float)
+    y_in = np.array(y_in, dtype=float)
+    yerr_in = np.array(yerr_in, dtype=float)
+
+    # try to scale the yerr to make the fit better
+    if material == "PS":
+        color = "C0"
+        # color = "C2"
+    elif material == "PVT":
+        color = "C1"
+        # color = "C3"
+
+    if fig is None or ax is None:
+        fig, ax = plt.subplots(figsize=(7, 6))
+    ax.errorbar(
+        x,
+        y_out,
+        xerr=xerr,
+        yerr=yerr_out,
+        fmt="o",
+        capsize=3,
+        label=material + " $n_{out}$",
+        color=color,
+    )
+    ax.errorbar(
+        x,
+        y_in,
+        xerr=xerr,
+        yerr=yerr_in,
+        fmt="x",
+        capsize=3,
+        label=material + " $n_{in}$",
+        color=color,
+    )
+    if not minimal:
+        ax.set_title(f"Index vs dose rate for {material}", fontsize=22)
+    ax.set_xlabel("Dose rate (Gy/h)")
+    ax.set_ylabel("refractive index")
+    ax.set_xlim(1, 10000)
+    ax.set_xscale("log")
+    ax.set_ylim(1.58, 1.70)
+
+    plt.tight_layout()
+
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+
+    input_irradiations = json.load(open(args.input_irradiations))
+    input_indices = json.load(open(args.input_indices))
+    input_list = json.load(open(args.input_list))
+
+    if args.both:
+        plotter(
+            material="PS",
+            input_irradiations=input_irradiations,
+            input_indices=input_indices,
+            minimal=True,
+        )
+        fig = plt.gcf()
+        ax = plt.gca()
+        plotter(
+            material="PVT",
+            input_irradiations=input_irradiations,
+            input_indices=input_indices,
+            fig=fig,
+            ax=ax,
+            minimal=True,
+        )
+        dummy_PS = ax.plot([], [], label="PS", color="C0", lw=3)[0]
+        dummy_PVT = ax.plot([], [], label="PVT", color="C1", lw=3)[0]
+
+        dummy_in = ax.errorbar(
+            [-100],
+            [-100],
+            xerr=[1],
+            yerr=[1],
+            fmt="x",
+            capsize=3,
+            label="in",
+            color="black",
+        )
+        dummy_out = ax.errorbar(
+            [-100],
+            [-100],
+            xerr=[1],
+            yerr=[1],
+            fmt="o",
+            capsize=3,
+            label="out",
+            color="black",
+        )
+
+        # Add legends
+        color_legend = ax.legend([dummy_PS, dummy_PVT], ["PS", "PVT"], loc="upper left")
+        ax.add_artist(color_legend)
+        ax.legend(
+            handles=[dummy_in, dummy_out],
+            labels=["inner", "outer"],
+            loc="upper right",
+        )
+        ax.minorticks_on()
+    else:
+        plotter(
+            input_irradiations=input_irradiations,
+            input_indices=input_indices,
+            material=args.material,
+        )
+
+    plt.savefig(args.output)
+    plt.show()
