@@ -4,6 +4,7 @@ import json
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
+from matplotlib.ticker import FixedLocator, LogLocator
 
 plt.style.use(hep.style.ROOT)
 
@@ -39,7 +40,13 @@ parser.add_argument(
 
 
 def plotter(
-    material, input_irradiations, input_indices, fig=None, ax=None, minimal=False
+    material,
+    input_irradiations,
+    input_indices,
+    fig=None,
+    ax=None,
+    minimal=False,
+    use_multicolor=False,
 ):
     x = []
     xerr = []
@@ -68,15 +75,22 @@ def plotter(
     yerr_in = np.array(yerr_in, dtype=float)
 
     # try to scale the yerr to make the fit better
-    if material == "PS":
-        color = "C0"
-        # color = "C2"
+    if use_multicolor:
+        color_in = "C0"
+        color_out = "C1"
+    elif material == "PS":
+        color_out = color_in = "C0"
+        if use_multicolor:
+            color_in = "C2"
     elif material == "PVT":
-        color = "C1"
-        # color = "C3"
+        color_out = color_in = "C1"
+        if use_multicolor:
+            color_in = "C3"
 
     if fig is None or ax is None:
         fig, ax = plt.subplots(figsize=(7, 6))
+
+    # Plot the outter indices
     ax.errorbar(
         x,
         y_out,
@@ -85,8 +99,20 @@ def plotter(
         fmt="o",
         capsize=3,
         label=material + " $n_{out}$",
-        color=color,
+        color=color_out,
     )
+    y_out_m = np.mean(y_out[~np.isnan(y_out)])
+    y_out_std = np.std(y_out[~np.isnan(y_out)])
+    ax.hlines(y_out_m, 1, 10000, color=color_out, linestyles="dashed")
+    ax.fill_between(
+        np.linspace(1, 10000, 100),
+        y_out_m - y_out_std,
+        y_out_m + y_out_std,
+        alpha=0.2,
+        color=color_out,
+    )
+
+    # Plot the inner indices
     ax.errorbar(
         x,
         y_in,
@@ -95,15 +121,28 @@ def plotter(
         fmt="x",
         capsize=3,
         label=material + " $n_{in}$",
-        color=color,
+        color=color_in,
     )
+    y_in_m = np.mean(y_in[~np.isnan(y_in)])
+    y_in_std = np.std(y_in[~np.isnan(y_in)])
+    ax.hlines(y_in_m, 1, 10000, color=color_in, linestyles="dashed")
+    ax.fill_between(
+        np.linspace(1, 10000, 100),
+        y_in_m - y_in_std,
+        y_in_m + y_in_std,
+        alpha=0.2,
+        color=color_in,
+    )
+
     if not minimal:
         ax.set_title(f"Index vs dose rate for {material}", fontsize=22)
     ax.set_xlabel("Dose rate (Gy/h)")
     ax.set_ylabel("refractive index")
     ax.set_xlim(1, 10000)
     ax.set_xscale("log")
-    ax.set_ylim(1.58, 1.70)
+    ax.set_ylim(1.595, 1.705)
+    if minimal and material == "PVT" and use_multicolor:
+        ax.set_ylim(1.588, 1.652)
 
     plt.tight_layout()
 
@@ -170,7 +209,46 @@ if __name__ == "__main__":
             input_irradiations=input_irradiations,
             input_indices=input_indices,
             material=args.material,
+            use_multicolor=True,
+            minimal=True,
+        )
+        fig = plt.gcf()
+        ax = plt.gca()
+        dummy_in = ax.errorbar(
+            [-100],
+            [-100],
+            xerr=[1],
+            yerr=[1],
+            fmt="x",
+            capsize=3,
+            label="inner",
+            color="C0",
+        )
+        dummy_out = ax.errorbar(
+            [-100],
+            [-100],
+            xerr=[1],
+            yerr=[1],
+            fmt="o",
+            capsize=3,
+            label="outer",
+            color="C1",
+        )
+        # color_legend = ax.legend([dummy_PS, dummy_PVT], ["PS", "PVT"], loc="upper left")
+        # ax.add_artist(color_legend)
+        ax.legend(
+            handles=[dummy_in, dummy_out],
+            labels=["inner", "outer"],
+            loc="upper right",
         )
 
-    plt.savefig(args.output)
+        minor_ticks = np.concatenate(
+            [np.arange(2, 10, 2) * 10**exp for exp in range(5)]
+        )
+        minor_locator = FixedLocator(minor_ticks)
+        major_locator = LogLocator(base=10.0, numticks=10)
+        ax.xaxis.set_minor_locator(minor_locator)
+        ax.xaxis.set_major_locator(major_locator)
+
+    plt.savefig(args.output, bbox_inches="tight")
     plt.show()

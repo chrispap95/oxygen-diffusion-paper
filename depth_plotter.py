@@ -124,21 +124,21 @@ def plotter(
     ax.errorbar(
         x, y, xerr=xerr, yerr=yerr, fmt="o", capsize=3, label="Data", color=color
     )
-    ax.set_xlabel("Dose rate (Gy/h)")
-    ax.set_ylabel("Depth (mm)")
-    ax.set_xlim(10, 10000)
-    ax.set_xscale("log")
-    ax.set_ylim(0, 5)
 
     least_squares = LeastSquares(x, y, yerr, inv_sq_root)
     m = Minuit(least_squares, p=0.1)
     m.migrad()
     m.hesse()
-    x_full = np.linspace(10, 10000, 9990)
+    x_full = np.logspace(0, 5, 1000)
     y, ycov = propagate(lambda p: inv_sq_root(x_full, p), m.values, m.covariance)
     yerr_prop = np.diag(ycov) ** 0.5
     ax.plot(x_full, y, label="fit")
     ax.fill_between(x_full, y - yerr_prop, y + yerr_prop, facecolor=color, alpha=0.5)
+    ax.set_xlabel("Dose rate (Gy/h)")
+    ax.set_ylabel("Depth (mm)")
+    ax.set_xlim(10, 10000)
+    ax.set_xscale("log")
+    ax.set_ylim(0, 5)
 
     # Plotting the fit info and legend
     if not minimal:
@@ -226,7 +226,9 @@ def plot_no_boundary(material, input_list, input_irradiations, ax):
         color=color,
         uplims=True,
     )
-    ax.set_xlim(1, 10000)
+    # The factor is to avoid the labels from overlapping
+    factor = 0.65
+    ax.set_xlim(1 * factor, 10000 / factor)
     return ax
 
 
@@ -302,5 +304,6 @@ if __name__ == "__main__":
                 ax=ax,
             )
 
-    plt.savefig(args.output)
+    plt.tight_layout()
+    plt.savefig(args.output, bbox_inches="tight")
     plt.show()
