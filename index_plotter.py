@@ -140,8 +140,11 @@ def plotter(
     ax.set_ylabel("refractive index")
     ax.set_xlim(1, 10000)
     ax.set_xscale("log")
-    ax.set_ylim(1.595, 1.705)
-    if minimal and material == "PVT" and use_multicolor:
+    if material == "PS":
+        ax.text(2.6, 1.685, material, fontsize=28)
+        ax.set_ylim(1.595, 1.705)
+    elif minimal and material == "PVT" and use_multicolor:
+        ax.text(2.6, 1.64, material, fontsize=28)
         ax.set_ylim(1.588, 1.652)
 
     plt.tight_layout()
@@ -251,4 +254,3 @@ if __name__ == "__main__":
         ax.xaxis.set_major_locator(major_locator)
 
     plt.savefig(args.output, bbox_inches="tight")
-    plt.show()
