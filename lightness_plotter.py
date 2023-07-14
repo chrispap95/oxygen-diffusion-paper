@@ -82,13 +82,13 @@ def plot_lightness(
     ax1.axis("off")
 
     # Plot the lines for the window used to calculate the lightness profile
-    ax1.plot([pad_size, shape[1]], [mid - cut, mid - cut], "r--")
-    ax1.plot([pad_size, shape[1]], [mid + cut, mid + cut], "r--")
+    ax1.plot([pad_size, shape[1]], [mid - cut, mid - cut], "r--", lw=3)
+    ax1.plot([pad_size, shape[1]], [mid + cut, mid + cut], "r--", lw=3)
 
     # Create a 1D plot of the data
     ax2 = ax1.twinx()
     ax2.plot(
-        range(pad_size, len(smoothened) + pad_size), smoothened, label="Data", lw=2
+        range(pad_size, len(smoothened) + pad_size), smoothened, label="Data", lw=3
     )
     ax2.yaxis.tick_left()
     ax2.yaxis.set_ticks_position("both")
@@ -101,10 +101,10 @@ def plot_lightness(
         peaks + pad_size,
         smoothened[peaks],
         "o",
-        ms=8,
+        ms=12,
         mec="r",
         mfc="none",
-        mew=2,
+        mew=4,
         label="Peaks",
     )
 
@@ -137,7 +137,7 @@ def plot_lightness(
     # fig.subplots_adjust(right=1.01)
 
     fig.savefig(output, bbox_inches="tight")
-    plt.show()
+    # plt.show()
 
 
 def get_config(filename, database="peak_positions.json"):
