@@ -19,7 +19,7 @@ input = json.load(open("data/pre_irr_index.json"))
 wavelengths = np.array([470, 527, 635])
 wl_space = np.linspace(400, 700, 1000)
 
-fig, ax = plt.subplots(figsize=(7, 6))
+fig, ax = plt.subplots(figsize=(8, 6))
 
 for material in input.keys():
     index = np.array([])
@@ -62,7 +62,7 @@ for material in input.keys():
     print(f"\nFit results for {material}:")
     print(f"  chi2 / ndof = {m.fval:.1f} / {m.ndof:.0f} = {m.fmin.reduced_chi2:.1f}")
     for p, v, e in zip(m.parameters, m.values, m.errors):
-        print(f"\t{p} = {v:.3f} ± {e:.3f}")
+        print(f"\t{p} = {v:.4f} ± {e:.4f}")
     print()
 
 ax.set_xlabel(r"Wavelength $\lambda$ (nm)")
