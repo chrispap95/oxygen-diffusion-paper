@@ -37,7 +37,7 @@ def plot_data_vs_sim(D, R, k1, k2, mode=None):
         label = f"R={R} k1={k1} k2={k2}"
     else:
         label = "color depth simulation"
-    maximum = np.load(f"test_{filename}.npy")
+    maximum = np.load(f"../data/sim_{filename}.npy")
 
     times = np.linspace(0, 35, 9999)
 
