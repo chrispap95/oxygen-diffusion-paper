@@ -60,7 +60,7 @@ def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
     times = times * (0.85 * times[-1] / t_saturation)
 
     fig, ax = plt.subplots(figsize=(8, 7))
-    (sim_plot,) = ax.plot(times, maximum, label=label)
+    (sim_plot,) = ax.plot(times, maximum, label=label, lw=2)
     data_plot = ax.errorbar(
         data_t,
         data_z,
