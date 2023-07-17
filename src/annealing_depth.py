@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
-from iminuit import Minuit
-from iminuit.cost import LeastSquares
-from jacobi import propagate
 
 plt.style.use(hep.style.ROOT)
 
@@ -94,6 +91,10 @@ def plot_data_vs_sim(D, R, k1, k2, mode=None):
         ax.text(t_saturation * 0.7, 0.3, rf"$\chi^2 = ${chi2:.4f}")
 
     if mode == "paper":
+        from iminuit import Minuit
+        from iminuit.cost import LeastSquares
+        from jacobi import propagate
+
         least_squares = LeastSquares(data_t, data_z - z_index, data_ez, sqrt_law)
         m = Minuit(least_squares, a=0.1)
         m.migrad()
