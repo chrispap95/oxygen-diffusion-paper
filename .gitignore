@@ -130,7 +130,6 @@ dmypy.json
 
 # PDF files
 *.pdf
-plots/
 
 # Photos
 *.jpg
