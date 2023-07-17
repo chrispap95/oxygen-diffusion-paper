@@ -1,5 +1,11 @@
+iminuit
+jacobi
 matplotlib
 mplhep
 numpy
+opencv-contrib-python
+pillow
 py-pde
+rich
 scipy
+uncertainties

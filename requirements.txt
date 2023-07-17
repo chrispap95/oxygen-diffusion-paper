@@ -10,15 +10,25 @@ cycler==0.11.0
     # via matplotlib
 fonttools==4.38.0
     # via matplotlib
+future==0.18.3
+    # via uncertainties
+iminuit==2.22.0
+    # via -r requirements.in
+jacobi==0.8.1
+    # via -r requirements.in
 kiwisolver==1.4.4
     # via matplotlib
 llvmlite==0.39.1
     # via numba
+markdown-it-py==3.0.0
+    # via rich
 matplotlib==3.6.2
     # via
     #   -r requirements.in
     #   mplhep
     #   py-pde
+mdurl==0.1.2
+    # via markdown-it-py
 mplhep==0.3.26
     # via -r requirements.in
 mplhep-data==0.0.3
@@ -31,24 +41,35 @@ numpy==1.23.5
     # via
     #   -r requirements.in
     #   contourpy
+    #   iminuit
+    #   jacobi
     #   matplotlib
     #   mplhep
     #   numba
+    #   opencv-contrib-python
     #   py-pde
     #   scipy
     #   uhi
+opencv-contrib-python==4.8.0.74
+    # via -r requirements.in
 packaging==22.0
     # via
     #   matplotlib
     #   mplhep
 pillow==9.3.0
-    # via matplotlib
+    # via
+    #   -r requirements.in
+    #   matplotlib
 py-pde==0.27.1
     # via -r requirements.in
+pygments==2.15.1
+    # via rich
 pyparsing==3.0.9
     # via matplotlib
 python-dateutil==2.8.2
     # via matplotlib
+rich==13.4.2
+    # via -r requirements.in
 scipy==1.9.3
     # via
     #   -r requirements.in
@@ -61,6 +82,8 @@ tqdm==4.64.1
     # via py-pde
 uhi==0.3.2
     # via mplhep
+uncertainties==3.1.7
+    # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
