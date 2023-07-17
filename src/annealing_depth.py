@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
+from matplotlib.container import ErrorbarContainer
+from matplotlib.legend_handler import HandlerErrorbar
+from matplotlib.ticker import MultipleLocator
 
 plt.style.use(hep.style.ROOT)
 
@@ -9,7 +12,7 @@ def sqrt_law(x, a):
     return a * np.sqrt(x)
 
 
-def plot_data_vs_sim(D, R, k1, k2, mode=None):
+def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
     """
     Plot the simulation results and the experimental data.
 
@@ -37,7 +40,7 @@ def plot_data_vs_sim(D, R, k1, k2, mode=None):
         label = f"R={R} k1={k1} k2={k2}"
     else:
         label = "color depth simulation"
-    maximum = np.load(f"../data/sim_{filename}.npy")
+    maximum = np.load(f"{data_dir}data/sim_{filename}.npy")
 
     times = np.linspace(0, 35, 9999)
 
@@ -56,18 +59,19 @@ def plot_data_vs_sim(D, R, k1, k2, mode=None):
     # Days to a.u.
     times = times * (0.85 * times[-1] / t_saturation)
 
-    fig, ax = plt.subplots(figsize=(10, 8))
-    ax.plot(times, maximum, label=label)
-    ax.errorbar(
+    fig, ax = plt.subplots(figsize=(8, 7))
+    (sim_plot,) = ax.plot(times, maximum, label=label)
+    data_plot = ax.errorbar(
         data_t,
         data_z,
         fmt="o",
         capsize=3,
+        color="black",
         xerr=data_et,
         yerr=data_ez,
         label="color depth data",
     )
-    ax.hlines(
+    index_line = ax.hlines(
         z_index_mean,
         -10,
         100,
@@ -102,19 +106,45 @@ def plot_data_vs_sim(D, R, k1, k2, mode=None):
         y_1, ycov = propagate(lambda p: sqrt_law(times, *p), m.values, m.covariance)
         y_1 += z_index_mean
         yerr_prop = np.diag(ycov) ** 0.5
-        ax.plot(times, y_1, label="fit", color="red", lw=2)
+        (fit,) = ax.plot(times, y_1, label=r"$z=A\sqrt{t}$", color="red", lw=2)
         ax.fill_between(
             times, y_1 - yerr_prop, y_1 + yerr_prop, facecolor="red", alpha=0.2
         )
 
-    ax.set_xlim(-1, 36)
+    ax.xaxis.set_major_locator(MultipleLocator(10))
+    ax.xaxis.set_minor_locator(MultipleLocator(2))
+    ax.set_xlim(-2, 32)
     ax.set_ylim(-0.2, 5.2)
     ax.set_xlabel("t (days)")
     ax.set_ylabel("z (mm)")
     fig.tight_layout()
-    plt.legend(loc="upper left")
-    plt.savefig("../plots/annealing_depth.pdf")
-    plt.show()
+    if mode == "paper":
+        plt.legend(
+            [sim_plot, data_plot, index_line, fit],
+            [
+                "color depth simulation",
+                "color depth data",
+                "index boundary",
+                r"$z=A\sqrt{t}$",
+            ],
+            handler_map={
+                ErrorbarContainer: HandlerErrorbar(xerr_size=0.5, yerr_size=0.5)
+            },
+            loc="upper left",
+        )
+    elif mode is None:
+        plt.legend(
+            [sim_plot, data_plot, index_line],
+            ["color depth simulation", "color depth data", "index boundary"],
+            handler_map={
+                ErrorbarContainer: HandlerErrorbar(xerr_size=0.5, yerr_size=0.5)
+            },
+            loc="upper left",
+        )
+    else:
+        plt.legend(loc="upper left")
+    plt.savefig(f"{data_dir}plots/annealing_depth.pdf", bbox_inches="tight")
+    # plt.show()
 
 
 if "__main__" == __name__:
@@ -125,4 +155,4 @@ if "__main__" == __name__:
     k2 = 0.2
 
     # run_sim(D, R, k1, k2)
-    plot_data_vs_sim(D, R, k1, k2)
+    plot_data_vs_sim(D, R, k1, k2, data_dir="", mode="paper")
