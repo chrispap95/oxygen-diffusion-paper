@@ -4,7 +4,7 @@ import json
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
-from matplotlib.ticker import FixedLocator, LogLocator
+from matplotlib.ticker import FixedLocator, LogLocator, MultipleLocator
 
 plt.style.use(hep.style.ROOT)
 
@@ -35,19 +35,11 @@ parser.add_argument(
     "--output",
     help="Output file",
     type=str,
-    default="plots/index.pdf",
+    default=None,
 )
 
 
-def plotter(
-    material,
-    input_irradiations,
-    input_indices,
-    fig=None,
-    ax=None,
-    minimal=False,
-    use_multicolor=False,
-):
+def loader(material, input_irradiations, input_indices, input_pre_irr):
     x = []
     xerr = []
     y_out = []
@@ -74,6 +66,53 @@ def plotter(
     y_in = np.array(y_in, dtype=float)
     yerr_in = np.array(yerr_in, dtype=float)
 
+    index_preirr_arr = np.array([])
+    index_preirr_arr_unc = np.array([])
+    for meas in input_pre_irr[material]["470"]:
+        index_preirr_arr = np.append(index_preirr_arr, meas[0])
+        index_preirr_arr_unc = np.append(index_preirr_arr_unc, meas[1])
+
+    return (
+        x,
+        xerr,
+        y_out,
+        yerr_out,
+        y_in,
+        yerr_in,
+        index_preirr_arr,
+        index_preirr_arr_unc,
+    )
+
+
+def plotter(
+    material,
+    input_irradiations,
+    input_indices,
+    input_pre_irr,
+    fig=None,
+    ax=None,
+    minimal=False,
+    use_multicolor=False,
+):
+    (
+        x,
+        xerr,
+        y_out,
+        yerr_out,
+        y_in,
+        yerr_in,
+        index_preirr_arr,
+        index_preirr_arr_unc,
+    ) = loader(material, input_irradiations, input_indices, input_pre_irr)
+    weights = 1 / (index_preirr_arr_unc**2)
+    index_preirr = np.average(index_preirr_arr, weights=weights)
+    index_preirr_unc = 1 / np.sqrt(np.sum(weights))
+
+    # change default color cycle
+    N = 2
+    color_cycle = plt.cycler(color=plt.cm.cividis(np.linspace(0, 1, N)))
+    plt.rcParams["axes.prop_cycle"] = color_cycle
+
     # try to scale the yerr to make the fit better
     if use_multicolor:
         color_in = "C0"
@@ -89,6 +128,15 @@ def plotter(
 
     if fig is None or ax is None:
         fig, ax = plt.subplots(figsize=(7, 6))
+
+    ax.hlines(index_preirr, 1, 10000, color="black", linestyles="-")
+    ax.fill_between(
+        np.linspace(1, 10000, 100),
+        index_preirr - index_preirr_unc,
+        index_preirr + index_preirr_unc,
+        alpha=0.2,
+        color="black",
+    )
 
     # Plot the outter indices
     ax.errorbar(
@@ -144,8 +192,10 @@ def plotter(
         ax.text(2.6, 1.685, material, fontsize=28)
         ax.set_ylim(1.595, 1.705)
     elif minimal and material == "PVT" and use_multicolor:
-        ax.text(2.6, 1.64, material, fontsize=28)
-        ax.set_ylim(1.588, 1.652)
+        ax.yaxis.set_major_locator(MultipleLocator(0.01))
+        ax.yaxis.set_minor_locator(MultipleLocator(0.002))
+        ax.text(2.6, 1.65, material, fontsize=28)
+        ax.set_ylim(1.588, 1.662)
 
     plt.tight_layout()
 
@@ -156,12 +206,14 @@ if __name__ == "__main__":
     input_irradiations = json.load(open(args.input_irradiations))
     input_indices = json.load(open(args.input_indices))
     input_list = json.load(open(args.input_list))
+    input_pre_irr = json.load(open("data/pre_irr_index.json"))
 
     if args.both:
         plotter(
             material="PS",
             input_irradiations=input_irradiations,
             input_indices=input_indices,
+            input_pre_irr=input_pre_irr,
             minimal=True,
         )
         fig = plt.gcf()
@@ -170,6 +222,7 @@ if __name__ == "__main__":
             material="PVT",
             input_irradiations=input_irradiations,
             input_indices=input_indices,
+            input_pre_irr=input_pre_irr,
             fig=fig,
             ax=ax,
             minimal=True,
@@ -211,6 +264,7 @@ if __name__ == "__main__":
         plotter(
             input_irradiations=input_irradiations,
             input_indices=input_indices,
+            input_pre_irr=input_pre_irr,
             material=args.material,
             use_multicolor=True,
             minimal=True,
@@ -237,11 +291,12 @@ if __name__ == "__main__":
             label="outer",
             color="C1",
         )
+        dummy_preirr = ax.plot([], [], label="fit", color="black", lw=2)
         # color_legend = ax.legend([dummy_PS, dummy_PVT], ["PS", "PVT"], loc="upper left")
         # ax.add_artist(color_legend)
         ax.legend(
-            handles=[dummy_in, dummy_out],
-            labels=["inner", "outer"],
+            handles=[dummy_in, dummy_out, dummy_preirr[0]],
+            labels=["inner", "outer", "pre-irr."],
             loc="upper right",
         )
 
@@ -253,4 +308,8 @@ if __name__ == "__main__":
         ax.xaxis.set_minor_locator(minor_locator)
         ax.xaxis.set_major_locator(major_locator)
 
-    plt.savefig(args.output, bbox_inches="tight")
+    if args.output is None:
+        output_name = f"plots/index_vs_dose_rate_{args.material}.pdf"
+    else:
+        output_name = args.output
+    plt.savefig(output_name, bbox_inches="tight")

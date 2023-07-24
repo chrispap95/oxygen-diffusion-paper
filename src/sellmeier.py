@@ -23,6 +23,7 @@ def make_plot(wl, n, n_err, B1, C1, material):
         color="red",
         label="reference",
         lw=2,
+        linestyle="--",
     )
     ax.set_xlabel(r"Wavelength $\lambda$ (nm)")
     ax.set_ylabel("Refractive index $n$")

@@ -59,8 +59,13 @@ def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
     # Days to a.u.
     times = times * (0.85 * times[-1] / t_saturation)
 
+    # change default color cycle
+    N = 3
+    color_cycle = plt.cycler(color=plt.cm.viridis(np.linspace(0, 1, N)))
+    plt.rcParams["axes.prop_cycle"] = color_cycle
+
     fig, ax = plt.subplots(figsize=(8, 7))
-    (sim_plot,) = ax.plot(times, maximum, label=label, lw=2)
+    (sim_plot,) = ax.plot(times, maximum, label=label, lw=2, color="C2")
     data_plot = ax.errorbar(
         data_t,
         data_z,
@@ -75,7 +80,7 @@ def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
         z_index_mean,
         -10,
         100,
-        color="black",
+        color="C0",
         linestyles="dashed",
         label="index boundary",
         linewidth=2,
@@ -85,7 +90,7 @@ def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
         z_index_mean - z_index_std,
         z_index_mean + z_index_std,
         alpha=0.2,
-        color="black",
+        color="C0",
     )
 
     # Calculate chi^2
@@ -106,10 +111,21 @@ def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
         y_1, ycov = propagate(lambda p: sqrt_law(times, *p), m.values, m.covariance)
         y_1 += z_index_mean
         yerr_prop = np.diag(ycov) ** 0.5
-        (fit,) = ax.plot(times, y_1, label=r"$z=A\sqrt{t}$", color="red", lw=2)
-        ax.fill_between(
-            times, y_1 - yerr_prop, y_1 + yerr_prop, facecolor="red", alpha=0.2
+        (fit,) = ax.plot(
+            times, y_1, label=r"$z^2_{color}=At$", color="C1", lw=2, linestyle="-."
         )
+        ax.fill_between(
+            times, y_1 - yerr_prop, y_1 + yerr_prop, facecolor="C1", alpha=0.2
+        )
+
+        # Print the fit results
+        print("\nFit results:")
+        print(
+            f"  chi2 / ndof = {m.fval:.1f} / {m.ndof:.0f} = {m.fmin.reduced_chi2:.1f}"
+        )
+        for p, v, e in zip(m.parameters, m.values, m.errors):
+            print(f"\t{p} = {v**2 / 24:.6f} ± {2*v*e/(24)**2:.6f} mm^2/hr")
+        print()
 
     ax.xaxis.set_major_locator(MultipleLocator(10))
     ax.xaxis.set_minor_locator(MultipleLocator(2))
@@ -125,7 +141,7 @@ def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
                 "color depth simulation",
                 "color depth data",
                 "index boundary",
-                r"$z=A\sqrt{t}$",
+                r"$z^2_{color}=At$",
             ],
             handler_map={
                 ErrorbarContainer: HandlerErrorbar(xerr_size=0.5, yerr_size=0.5)

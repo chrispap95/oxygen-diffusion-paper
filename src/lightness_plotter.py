@@ -12,7 +12,11 @@ plt.style.use(hep.style.ROOT)
 # Input parameters
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "-f", "--filename", type=str, help="The filename of the image to process"
+    "-f",
+    "--filename",
+    type=str,
+    default="data/video_frames/EJ200PS-L9R/FaceA/frame0.png",
+    help="The filename of the image to process",
 )
 parser.add_argument(
     "-o",
@@ -25,7 +29,7 @@ parser.add_argument(
     "-c",
     "--config",
     type=str,
-    default="data/peak_positions_stills.json",
+    default="data/peak_positions_videos.json",
     help="The path to the config file. If not specified, the default config file will be used",
 )
 
@@ -88,7 +92,11 @@ def plot_lightness(
     # Create a 1D plot of the data
     ax2 = ax1.twinx()
     ax2.plot(
-        range(pad_size, len(smoothened) + pad_size), smoothened, label="Data", lw=3
+        range(pad_size, len(smoothened) + pad_size),
+        smoothened,
+        label="Data",
+        lw=3,
+        color="yellow",
     )
     ax2.yaxis.tick_left()
     ax2.yaxis.set_ticks_position("both")

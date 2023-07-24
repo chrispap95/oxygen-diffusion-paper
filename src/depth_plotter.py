@@ -113,8 +113,10 @@ def plotter(
     # try to scale the yerr to make the fit better
     color = "C0"
     if material == "PS":
+        marker = "o"
         scale = 0.08
     elif material == "PVT":
+        marker = "x"
         color = "C1"
         scale = 0.05
     yerr = np.sqrt(yerr**2 + (y * scale) ** 2)
@@ -122,7 +124,7 @@ def plotter(
     if fig is None or ax is None:
         fig, ax = plt.subplots(figsize=(7, 6))
     ax.errorbar(
-        x, y, xerr=xerr, yerr=yerr, fmt="o", capsize=3, label="Data", color=color
+        x, y, xerr=xerr, yerr=yerr, fmt=marker, capsize=3, label="Data", color=color
     )
 
     least_squares = LeastSquares(x, y, yerr, inv_sq_root)
@@ -239,6 +241,11 @@ if __name__ == "__main__":
     input_depths = json.load(open(args.input_depths))
     input_list = json.load(open(args.input_list))
 
+    # change default color cycle
+    N = 2
+    color_cycle = plt.cycler(color=plt.cm.cividis(np.linspace(0, 1, N)))
+    plt.rcParams["axes.prop_cycle"] = color_cycle
+
     if args.both:
         fig, ax = plotter(
             material="PS",
@@ -267,8 +274,29 @@ if __name__ == "__main__":
                 input_irradiations=input_irradiations,
                 ax=ax,
             )
-        dummy_PS = ax.plot([], [], label="PS", color="C0", lw=3)[0]
-        dummy_PVT = ax.plot([], [], label="PS", color="C1", lw=3)[0]
+        # dummy_PS = ax.plot([], [], label="PS", color="C0", lw=3)[0]
+        # dummy_PVT = ax.plot([], [], label="PS", color="C1", lw=3)[0]
+
+        dummy_PS = ax.errorbar(
+            [-100],
+            [-100],
+            xerr=[1],
+            yerr=[1],
+            fmt="o",
+            capsize=3,
+            label="data",
+            color="C0",
+        )
+        dummy_PVT = ax.errorbar(
+            [-100],
+            [-100],
+            xerr=[1],
+            yerr=[1],
+            fmt="x",
+            capsize=3,
+            label="data",
+            color="C1",
+        )
 
         dummy_line = ax.plot([], [], label="fit", color="black", lw=3)
         dummy_errorbar = ax.errorbar(

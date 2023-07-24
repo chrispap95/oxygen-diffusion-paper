@@ -19,6 +19,11 @@ input = json.load(open("data/pre_irr_index.json"))
 wavelengths = np.array([470, 527, 635])
 wl_space = np.linspace(400, 700, 1000)
 
+# change default color cycle
+N = 2
+color_cycle = plt.cycler(color=plt.cm.cividis(np.linspace(0, 1, N)))
+plt.rcParams["axes.prop_cycle"] = color_cycle
+
 fig, ax = plt.subplots(figsize=(8, 6))
 
 for material in input.keys():
@@ -36,14 +41,16 @@ for material in input.keys():
 
     if material == "PS":
         color = "C0"
+        marker = "o"
     elif material == "PVT":
         color = "C1"
+        marker = "x"
 
     ax.errorbar(
         wavelengths,
         index,
         yerr=index_unc,
-        fmt="o",
+        fmt=marker,
         label=material,
         capsize=3,
         color=color,
