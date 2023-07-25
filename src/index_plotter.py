@@ -66,11 +66,11 @@ def loader(material, input_irradiations, input_indices, input_pre_irr):
     y_in = np.array(y_in, dtype=float)
     yerr_in = np.array(yerr_in, dtype=float)
 
-    index_preirr_arr = np.array([])
-    index_preirr_arr_unc = np.array([])
+    index_unirr_arr = np.array([])
+    index_unirr_arr_unc = np.array([])
     for meas in input_pre_irr[material]["470"]:
-        index_preirr_arr = np.append(index_preirr_arr, meas[0])
-        index_preirr_arr_unc = np.append(index_preirr_arr_unc, meas[1])
+        index_unirr_arr = np.append(index_unirr_arr, meas[0])
+        index_unirr_arr_unc = np.append(index_unirr_arr_unc, meas[1])
 
     return (
         x,
@@ -79,8 +79,8 @@ def loader(material, input_irradiations, input_indices, input_pre_irr):
         yerr_out,
         y_in,
         yerr_in,
-        index_preirr_arr,
-        index_preirr_arr_unc,
+        index_unirr_arr,
+        index_unirr_arr_unc,
     )
 
 
@@ -101,12 +101,12 @@ def plotter(
         yerr_out,
         y_in,
         yerr_in,
-        index_preirr_arr,
-        index_preirr_arr_unc,
+        index_unirr_arr,
+        index_unirr_arr_unc,
     ) = loader(material, input_irradiations, input_indices, input_pre_irr)
-    weights = 1 / (index_preirr_arr_unc**2)
-    index_preirr = np.average(index_preirr_arr, weights=weights)
-    index_preirr_unc = 1 / np.sqrt(np.sum(weights))
+    weights = 1 / (index_unirr_arr_unc**2)
+    index_unirr = np.average(index_unirr_arr, weights=weights)
+    index_unirr_unc = 1 / np.sqrt(np.sum(weights))
 
     # change default color cycle
     N = 2
@@ -129,11 +129,11 @@ def plotter(
     if fig is None or ax is None:
         fig, ax = plt.subplots(figsize=(7, 6))
 
-    ax.hlines(index_preirr, 1, 10000, color="black", linestyles="-")
+    ax.hlines(index_unirr, 1, 10000, color="black", linestyles="-")
     ax.fill_between(
         np.linspace(1, 10000, 100),
-        index_preirr - index_preirr_unc,
-        index_preirr + index_preirr_unc,
+        index_unirr - index_unirr_unc,
+        index_unirr + index_unirr_unc,
         alpha=0.2,
         color="black",
     )
@@ -291,12 +291,12 @@ if __name__ == "__main__":
             label="outer",
             color="C1",
         )
-        dummy_preirr = ax.plot([], [], label="fit", color="black", lw=2)
+        dummy_unirr = ax.plot([], [], label="fit", color="black", lw=2)
         # color_legend = ax.legend([dummy_PS, dummy_PVT], ["PS", "PVT"], loc="upper left")
         # ax.add_artist(color_legend)
         ax.legend(
-            handles=[dummy_in, dummy_out, dummy_preirr[0]],
-            labels=["inner", "outer", "pre-irr."],
+            handles=[dummy_in, dummy_out, dummy_unirr[0]],
+            labels=["inner", "outer", "unirr."],
             loc="upper right",
         )
 
