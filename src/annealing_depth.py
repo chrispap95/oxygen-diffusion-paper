@@ -59,9 +59,11 @@ def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
     # Days to a.u.
     times = times * (0.85 * times[-1] / t_saturation)
 
-    # change default color cycle
+    # will use cividis colors but change the first one to orange
     N = 3
-    color_cycle = plt.cycler(color=plt.cm.viridis(np.linspace(0, 1, N)))
+    cividis_colors = plt.cm.cividis(np.linspace(0, 1, N))
+    cividis_colors[-1] = (1, 0.549, 0, 1)
+    color_cycle = plt.cycler(color=cividis_colors)
     plt.rcParams["axes.prop_cycle"] = color_cycle
 
     fig, ax = plt.subplots(figsize=(8, 7))

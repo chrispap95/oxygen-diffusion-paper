@@ -243,7 +243,9 @@ if __name__ == "__main__":
 
     # change default color cycle
     N = 2
-    color_cycle = plt.cycler(color=plt.cm.cividis(np.linspace(0, 1, N)))
+    colors = plt.cm.cividis(np.linspace(0, 1, N))
+    colors[-1] = (1, 0.549, 0, 1)
+    color_cycle = plt.cycler(color=colors)
     plt.rcParams["axes.prop_cycle"] = color_cycle
 
     if args.both:

@@ -108,9 +108,11 @@ def plotter(
     index_unirr = np.average(index_unirr_arr, weights=weights)
     index_unirr_unc = 1 / np.sqrt(np.sum(weights))
 
-    # change default color cycle
+    # will use cividis colors but change the first one to orange
     N = 2
-    color_cycle = plt.cycler(color=plt.cm.cividis(np.linspace(0, 1, N)))
+    cividis_colors = plt.cm.cividis(np.linspace(0, 1, N))
+    cividis_colors[-1] = (1, 0.549, 0, 1)
+    color_cycle = plt.cycler(color=cividis_colors)
     plt.rcParams["axes.prop_cycle"] = color_cycle
 
     # try to scale the yerr to make the fit better

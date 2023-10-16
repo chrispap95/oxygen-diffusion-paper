@@ -19,9 +19,11 @@ input = json.load(open("data/pre_irr_index.json"))
 wavelengths = np.array([470, 527, 635])
 wl_space = np.linspace(400, 700, 1000)
 
-# change default color cycle
+# will use cividis colors but change the first one to orange
 N = 2
-color_cycle = plt.cycler(color=plt.cm.cividis(np.linspace(0, 1, N)))
+cividis_colors = plt.cm.cividis(np.linspace(0, 1, N))
+cividis_colors[-1] = (1, 0.549, 0, 1)
+color_cycle = plt.cycler(color=cividis_colors)
 plt.rcParams["axes.prop_cycle"] = color_cycle
 
 fig, ax = plt.subplots(figsize=(8, 6))
