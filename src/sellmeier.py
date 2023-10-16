@@ -1,3 +1,5 @@
+import json
+
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
@@ -13,7 +15,7 @@ def sellmeier_eq(wl, B1, C1):
 
 
 def make_plot(wl, n, n_err, B1, C1, material):
-    wl_space = np.linspace(400, 700, 1000)
+    wl_space = np.linspace(380, 720, 1000)
 
     fig, ax = plt.subplots(figsize=(7, 6))
     ax.errorbar(wl, n, yerr=n_err, fmt="o", color="black", label="data", capsize=3)
@@ -28,8 +30,11 @@ def make_plot(wl, n, n_err, B1, C1, material):
     ax.set_xlabel(r"Wavelength $\lambda$ (nm)")
     ax.set_ylabel("Refractive index $n$")
     ax.set_xlim(400, 700)
-    if material == "BGO":
-        ax.set_ylim(1.99, 2.26)
+    if wl[0] == 400:
+        ax.set_xlim(380, 720)
+    if "BGO" in material:
+        # ax.set_ylim(1.99, 2.26)
+        ax.set_ylim(2.04, 2.26)
         ax.text(600, 2.2, material, fontsize=28)
     elif material == "PS":
         ax.set_ylim(1.568, 1.622)
@@ -76,22 +81,20 @@ def make_plot(wl, n, n_err, B1, C1, material):
     print()
 
     plt.tight_layout()
-    fig.savefig(f"plots/sellmeier_{material}.pdf", bbox_inches="tight")
+    fig.savefig(
+        f"plots/sellmeier_{material.replace(' ', '_')}.pdf", bbox_inches="tight"
+    )
 
 
 if __name__ == "__main__":
-    B1_bgo = 3.1218393
-    C1_bgo = 0.03265249
-    wl = np.array([470, 527, 635])
-    n = np.array([2.155440415, 2.127877238, 2.083472454])
-    n_err = np.array([0.018615144, 0.01814214, 0.017392925])
-
-    make_plot(wl, n, n_err, B1_bgo, C1_bgo, "BGO")
-
-    B1_ps = 1.4435
-    C1_ps = 0.020216
-    wl = np.array([470, 527, 635])
-    n = np.array([1.607899807, 1.60224, 1.58149084])
-    n_err = np.array([0.002065956, 0.002051452, 0.001998717])
-
-    make_plot(wl, n, n_err, B1_ps, C1_ps, "PS")
+    input = json.load(open("data/validation_indices.json"))
+    for material in input.keys():
+        B1 = input[material]["B1"]
+        C1 = input[material]["C1"]
+        wl = np.array([int(i) for i in list(input[material]["measurements"].keys())])
+        index = np.array([])
+        index_unc = np.array([])
+        for wl_i in input[material]["measurements"].keys():
+            index = np.append(index, input[material]["measurements"][wl_i][0])
+            index_unc = np.append(index_unc, input[material]["measurements"][wl_i][1])
+        make_plot(wl, index, index_unc, B1, C1, material)
