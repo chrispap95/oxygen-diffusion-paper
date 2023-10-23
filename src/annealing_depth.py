@@ -161,7 +161,7 @@ def plot_data_vs_sim(D, R, k1, k2, data_dir="../", mode=None):
         )
     else:
         plt.legend(loc="upper left")
-    plt.savefig(f"{data_dir}plots/annealing_depth.pdf", bbox_inches="tight")
+    plt.savefig(f"{data_dir}plots/fig13_annealing_depth.pdf", bbox_inches="tight")
     # plt.show()
 
 

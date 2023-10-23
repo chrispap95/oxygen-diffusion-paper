@@ -22,7 +22,7 @@ parser.add_argument(
     "-o",
     "--output",
     type=str,
-    default="plots/lightness.pdf",
+    default="plots/fig8b_lightness.pdf",
     help="The output file to save the plt.",
 )
 parser.add_argument(

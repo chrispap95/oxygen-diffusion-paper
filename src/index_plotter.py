@@ -311,7 +311,7 @@ if __name__ == "__main__":
         ax.xaxis.set_major_locator(major_locator)
 
     if args.output is None:
-        output_name = f"plots/index_vs_dose_rate_{args.material}.pdf"
+        output_name = f"plots/fig15_index_vs_dose_rate_{args.material}.pdf"
     else:
         output_name = args.output
     plt.savefig(output_name, bbox_inches="tight")

@@ -49,7 +49,7 @@ parser.add_argument(
     "--output",
     help="Output file",
     type=str,
-    default="plots/depth_vs_dose_rate.pdf",
+    default="plots/fig12_depth_vs_dose_rate.pdf",
 )
 
 

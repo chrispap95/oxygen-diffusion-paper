@@ -82,7 +82,7 @@ def make_plot(wl, n, n_err, B1, C1, material):
 
     plt.tight_layout()
     fig.savefig(
-        f"plots/sellmeier_{material.replace(' ', '_')}.pdf", bbox_inches="tight"
+        f"plots/fig11_sellmeier_{material.replace(' ', '_')}.pdf", bbox_inches="tight"
     )
 
 
